@@ -1,0 +1,774 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "My API",
+        "description": "Auto-generated Swagger docs for your Laravel API",
+        "version": "1.0.0"
+    },
+    "paths": {
+        "/api/users": {
+            "get": {
+                "tags": [
+                    "Users"
+                ],
+                "summary": "Get all users",
+                "description": "Returns a paginated list of all users. Optionally includes inactive ones.",
+                "operationId": "7f484b4df5bd25b091407839f8f54e6a",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/PageParam"
+                    },
+                    {
+                        "$ref": "#/components/parameters/CountParam"
+                    },
+                    {
+                        "$ref": "#/components/parameters/InactiveParam"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "A paginated list of users",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/PaginatedUser"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Not found"
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "Users"
+                ],
+                "summary": "Create a new user",
+                "description": "Creates a new user in the system after validating the input data.",
+                "operationId": "be551c1d694a01c164966f58bfa77013",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "name": {
+                                        "type": "string",
+                                        "example": "ccc"
+                                    },
+                                    "email": {
+                                        "type": "string",
+                                        "format": "email",
+                                        "example": "ccc@ccc.com"
+                                    },
+                                    "password": {
+                                        "type": "string",
+                                        "example": "123456789"
+                                    },
+                                    "password_confirmation": {
+                                        "type": "string",
+                                        "example": "123456789"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "User created successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/User"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation failed",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Validation failed"
+                                        },
+                                        "errors": {
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/users/{user_id}": {
+            "get": {
+                "tags": [
+                    "Users"
+                ],
+                "summary": "Get a single user",
+                "description": "Retrieve a specific user by their ID.",
+                "operationId": "1618642f01213f33b9a5efc8207758e1",
+                "parameters": [
+                    {
+                        "name": "user_id",
+                        "in": "path",
+                        "description": "ID of the user to retrieve",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "example": 1
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "User found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/User"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "User not found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "User id 1 not found"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "Users"
+                ],
+                "summary": "Update a user",
+                "description": "Updates a user's `name`, `active` or `password`. If updating `password`, `password_confirmation` is required and must match.",
+                "operationId": "9d9eb9bb2252bad06b6f18a21a251e0f",
+                "parameters": [
+                    {
+                        "name": "user_id",
+                        "in": "path",
+                        "description": "ID of the user to update",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": false,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "name": {
+                                        "type": "string",
+                                        "example": "bbb"
+                                    },
+                                    "password": {
+                                        "type": "string",
+                                        "example": "123456789"
+                                    },
+                                    "password_confirmation": {
+                                        "type": "string",
+                                        "example": "123456789"
+                                    },
+                                    "active": {
+                                        "type": "boolean",
+                                        "example": "false"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "User updated successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/User"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "User not found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "User id 1 not found"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation failed",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Validation failed"
+                                        },
+                                        "errors": {
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "Users"
+                ],
+                "summary": "Soft delete a user",
+                "description": "Sets the user's `active` status to false instead of permanently deleting the record.",
+                "operationId": "ea98c76bf835b20efbeead3ad21dad8b",
+                "parameters": [
+                    {
+                        "name": "user_id",
+                        "in": "path",
+                        "description": "ID of the user to deactivate",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "User deactivated successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/User"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "User not found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "User id 1 not found"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/users/by-email/{email}": {
+            "get": {
+                "tags": [
+                    "Users"
+                ],
+                "summary": "Get user by email address",
+                "description": "Fetches a single user based on their email. Returns 404 if the user is not found.",
+                "operationId": "0ea84a4bb5439d6f1bfcc1d570815541",
+                "parameters": [
+                    {
+                        "name": "email",
+                        "in": "path",
+                        "description": "Email address of the user to fetch",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "format": "email",
+                            "example": "aaa@aaa.com"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "User found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/User"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "User not found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "User with email 'aaa@aaa.com' was not found"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/users/{user_id}/favorites": {
+            "get": {
+                "tags": [
+                    "Resources"
+                ],
+                "summary": "Get 'Favorites' resources for a user",
+                "description": "Returns paginated resources marked as 'favorites' by the user. Optionally includes inactive resources.",
+                "operationId": "0fa5a51ceceaef241359e5691a53d969",
+                "parameters": [
+                    {
+                        "name": "user_id",
+                        "in": "path",
+                        "description": "User ID",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "example": 1
+                        }
+                    },
+                    {
+                        "$ref": "#/components/parameters/PageParam"
+                    },
+                    {
+                        "$ref": "#/components/parameters/CountParam"
+                    },
+                    {
+                        "$ref": "#/components/parameters/InactiveParam"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "List of favorite resources",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/PaginatedUser"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "User not found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "User id 1 not found"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/users/{user_id}/resources": {
+            "get": {
+                "tags": [
+                    "Resources"
+                ],
+                "summary": "Get resources created by the user",
+                "description": "Returns a paginated list of resources authored by the specified user.",
+                "operationId": "c0b8a2b5c260b49a2d8dec87f8cb89fa",
+                "parameters": [
+                    {
+                        "name": "user_id",
+                        "in": "path",
+                        "description": "ID of the user",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "example": 1
+                        }
+                    },
+                    {
+                        "$ref": "#/components/parameters/PageParam"
+                    },
+                    {
+                        "$ref": "#/components/parameters/CountParam"
+                    },
+                    {
+                        "$ref": "#/components/parameters/InactiveParam"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "List of user resources",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/PaginatedUser"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "User not found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "User id 1 not found"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/users/authenticate": {
+            "post": {
+                "tags": [
+                    "Users"
+                ],
+                "summary": "Authenticate a user",
+                "description": "Authenticates a user and returns an access token along with user data.",
+                "operationId": "189c0cafe2d3a81c2a95ce15522be3d2",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "email",
+                                    "password"
+                                ],
+                                "properties": {
+                                    "email": {
+                                        "type": "string",
+                                        "format": "email",
+                                        "example": "aaa@aaa.com"
+                                    },
+                                    "password": {
+                                        "type": "string",
+                                        "example": "123456789"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Authentication successful",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "access_token": {
+                                            "type": "string",
+                                            "example": "7|ZtSnb7IJXXIOSdYURccD0KTGOtDbBct6yqvihDm112b4d82d"
+                                        },
+                                        "token_type": {
+                                            "type": "string",
+                                            "example": "Bearer"
+                                        },
+                                        "user": {
+                                            "properties": {
+                                                "id": {
+                                                    "type": "integer",
+                                                    "example": 4
+                                                },
+                                                "name": {
+                                                    "type": "string",
+                                                    "example": "aaa"
+                                                },
+                                                "email": {
+                                                    "type": "string",
+                                                    "format": "email",
+                                                    "example": "aaa@aaa.com"
+                                                },
+                                                "email_verified_at": {
+                                                    "type": "string",
+                                                    "format": "date-time",
+                                                    "example": null,
+                                                    "nullable": true
+                                                },
+                                                "created_at": {
+                                                    "type": "string",
+                                                    "format": "date-time",
+                                                    "example": "2025-04-15T10:41:22.000000Z"
+                                                },
+                                                "updated_at": {
+                                                    "type": "string",
+                                                    "format": "date-time",
+                                                    "example": "2025-04-15T10:41:22.000000Z"
+                                                },
+                                                "active": {
+                                                    "type": "boolean",
+                                                    "example": true
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized - Invalid credentials",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Invalid credentials"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation failed",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Validation failed"
+                                        },
+                                        "errors": {
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/users/logout": {
+            "post": {
+                "tags": [
+                    "Users"
+                ],
+                "summary": "Logout user",
+                "description": "Logs out the currently authenticated user by deleting their current access token.",
+                "operationId": "18952050d62f2c13afd26edccd883392",
+                "responses": {
+                    "200": {
+                        "description": "Logout successful",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Logged out"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Could not logout - Invalid or missing authentication",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Could not logout"
+                                        },
+                                        "errors": {
+                                            "properties": {
+                                                "Authentication": {
+                                                    "type": "string",
+                                                    "example": "Invalid Auth Header"
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        }
+    },
+    "components": {
+        "schemas": {
+            "User": {
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "example": 1
+                    },
+                    "name": {
+                        "type": "string",
+                        "example": "admin"
+                    },
+                    "email": {
+                        "type": "string",
+                        "example": "admin@admin.fr"
+                    },
+                    "email_verified_at": {
+                        "type": "string",
+                        "example": null,
+                        "nullable": true
+                    },
+                    "created_at": {
+                        "type": "string",
+                        "format": "date-time",
+                        "example": "2025-04-14T07:53:12.000000Z"
+                    },
+                    "updated_at": {
+                        "type": "string",
+                        "format": "date-time",
+                        "example": "2025-04-14T07:53:12.000000Z"
+                    },
+                    "active": {
+                        "type": "boolean",
+                        "example": true
+                    }
+                },
+                "type": "object"
+            },
+            "PaginatedUser": {
+                "properties": {
+                    "current_page": {
+                        "type": "integer",
+                        "example": 1
+                    },
+                    "per_page": {
+                        "type": "integer",
+                        "example": 10
+                    },
+                    "total": {
+                        "type": "integer",
+                        "example": 1
+                    },
+                    "data": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/User"
+                        }
+                    }
+                },
+                "type": "object"
+            }
+        },
+        "parameters": {
+            "PageParam": {
+                "name": "page",
+                "in": "query",
+                "description": "Page number",
+                "required": false,
+                "schema": {
+                    "type": "integer",
+                    "example": 1
+                }
+            },
+            "CountParam": {
+                "name": "count",
+                "in": "query",
+                "description": "Items per page",
+                "required": false,
+                "schema": {
+                    "type": "integer",
+                    "example": 10
+                }
+            },
+            "InactiveParam": {
+                "name": "inactive",
+                "in": "query",
+                "description": "Include inactives results",
+                "required": false,
+                "schema": {
+                    "type": "boolean",
+                    "example": false
+                }
+            }
+        },
+        "securitySchemes": {
+            "bearerAuth": {
+                "type": "http",
+                "bearerFormat": "JWT",
+                "scheme": "bearer"
+            }
+        }
+    },
+    "tags": [
+        {
+            "name": "Users",
+            "description": "Users"
+        },
+        {
+            "name": "Resources",
+            "description": "Resources"
+        }
+    ]
+}
