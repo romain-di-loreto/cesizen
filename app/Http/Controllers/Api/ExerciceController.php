@@ -22,7 +22,7 @@ class ExerciceController extends Controller
         $includeInactive = filter_var($request->query('inactive', false), FILTER_VALIDATE_BOOLEAN);
         $includeOnlyPublished = filter_var($request->query('public', true), FILTER_VALIDATE_BOOLEAN);
 
-        if (!$user || !$user->role || $user->role->name !== Role::ADMIN)
+        if (!$user || !$user->role() || $user->role()->name !== Role::ADMIN)
         {
             $includeInactive = false;
             $includeOnlyPublished = true;
@@ -57,7 +57,7 @@ class ExerciceController extends Controller
     public function store(Request $request)
     {
         $user = $request->user();
-        $role = $user->role;
+        $role = $user->role();
         
         $rules = [
             'author_id'    => 'nullable|int|exists:users,id',
@@ -89,7 +89,11 @@ class ExerciceController extends Controller
             ], 422);
         }
 
+        
+
         $author_id = $request->filled('author_id') ? $request->author_id : $user->id;
+
+        $exercice = $request->title;
 
         $exercice = BreathingExercice::create([
             'title'        => $request->title,
@@ -111,7 +115,7 @@ class ExerciceController extends Controller
     public function update(Request $request, $exercice_id)
     {
         $user = $request->user();
-        $role = $user->role;
+        $role = $user->role();
 
         $exercice = BreathingExercice::find($exercice_id);
 
@@ -164,7 +168,7 @@ class ExerciceController extends Controller
     public function destroy(Request $request, $exercice_id)
     {
         $user = $request->user();
-        $role = $user->role;
+        $role = $user->role();
 
         $hard = filter_var($request->query('hard', false), FILTER_VALIDATE_BOOLEAN);
 
@@ -217,7 +221,7 @@ class ExerciceController extends Controller
     public function toggleFavorite(Request $request)
     {
         $user = $request->user();
-        $role = $user->role;
+        $role = $user->role();
 
         if(!$role) {
             abort(401, 'Unauthorized');

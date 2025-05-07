@@ -13,6 +13,8 @@ class BreathingExercice extends Model
     protected $table = 'breathing_exercices';
 
     protected $fillable = [
+        'author_id',
+        'title',
         'inhale_time',
         'exhale_time',
         'hold_time',

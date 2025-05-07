@@ -23,15 +23,17 @@ class CheckPermission
             }
         }
 
-        if ($requiredRole != 'None' || count($permissions) != 0 && (!$user || !$user->role)) {
+        $role = $user ? $user->role() : null;
+
+        if ($requiredRole == 'None' && count($permissions) != 0 || $requiredRole != 'None' && (!$user || !$role)) {
             abort(403, 'Unauthorized: No role assigned.');
         }
         
-        if ($requiredRole && $requiredRole != 'None' && $user->role->name !== $requiredRole) {
+        if ($requiredRole && $requiredRole != 'None' && $role->name !== $requiredRole) {
             abort(403, 'Unauthorized: Incorrect role.');
         }
 
-        if ($requiredRole != 'None' && !empty($permissions) && !$user->role->can(...$permissions)) {
+        if ($requiredRole != 'None' && !empty($permissions) && !$role->can(...$permissions)) {
             abort(403, 'Unauthorized: Missing required permissions.');
         }
 

@@ -20,7 +20,7 @@ class InformationController extends Controller
         $count = $request->query('count', PaginationHelper::DEFAULT_COUNT);
         $includeInactive = filter_var($request->query('inactive', false), FILTER_VALIDATE_BOOLEAN);
 
-        if (!$user || !$user->role || $user->role->name !== Role::ADMIN)
+        if (!$user || !$user->role() || $user->role()->name !== Role::ADMIN)
         {
             $includeInactive = false;
         }
@@ -152,7 +152,7 @@ class InformationController extends Controller
     public function toggleFavorite(Request $request)
     {
         $user = $request->user();
-        $role = $user->role;
+        $role = $user->role();
 
         if(!$role) {
             abort(401, 'Unauthorized');

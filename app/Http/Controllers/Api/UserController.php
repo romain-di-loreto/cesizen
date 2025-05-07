@@ -108,7 +108,7 @@ class UserController extends Controller
         $count = $request->query('count', PaginationHelper::DEFAULT_COUNT);
         $includeInactive = filter_var($request->query('inactive', false), FILTER_VALIDATE_BOOLEAN);
 
-        if (!$user || !$user->role || $user->role->name !== Role::ADMIN)
+        if (!$user || !$user->role() || $user->role()->name !== Role::ADMIN)
         {
             $includeInactive = false;
         }
@@ -202,6 +202,8 @@ class UserController extends Controller
         $includeInactive = filter_var($request->query('inactive', false), FILTER_VALIDATE_BOOLEAN);
 
         $userAuthed = $request->user();
+        if($userAuthed)
+            abort(406, 'truc');
 
         $role = $userAuthed->role;
         if($user_id != $userAuthed->id && !$role || $role->name != Role::ADMIN) {
@@ -363,6 +365,7 @@ class UserController extends Controller
         }
     
         $user = User::where('email', $request->email)->where('active', '=', true)->first();
+        // $user->tokens()->delete();
         $token = $user->createToken('api-token')->plainTextToken;
         
         return response()->json([
@@ -529,20 +532,22 @@ class UserController extends Controller
         $role = $user->role();
         if(!$role || !$role->can(RolePermission::UPDATE_SELF))
         {
-            return response()->json([
-                'message' => 'Operation not permitted',
-                'errors' => ["Role" => "Invalid Permissions"]
-            ], 401 );
+            abort(400, "lala");
+            // return response()->json([
+            //     'message' => 'Operation not permitted',
+            //     'errors' => ["Role" => "Invalid Permissions"]
+            // ], 401 );
         }
 
         $userToUpdate = User::find($user_id);
 
         if($role && $userToUpdate->id != $user->id && !$role->can(RolePermission::UPDATE_USER))
         {
-            return response()->json([
-                'message' => 'Operation not permitted',
-                'errors' => ["Role" => "Invalid Permissions"]
-            ], 401 );
+            abort(400, "lalaland");
+            // return response()->json([
+            //     'message' => 'Operation not permitted',
+            //     'errors' => ["Role" => "Invalid Permissions"]
+            // ], 401 );
         }
 
         $validator = Validator::make($request->all(), [
@@ -595,7 +600,9 @@ class UserController extends Controller
                 ],422);
         }
 
-        
+        $userToUpdate->save();
+    
+        return response()->json($userToUpdate, 200);
     }
 
     /**
@@ -688,4 +695,11 @@ class UserController extends Controller
             return response()->json(['message' => 'User deactivated'], 200);
         }
     }
+
+    public function roles(Request $request, $user_id)
+    {
+        return response()->json(Role::all());
+    }
+
+    
 }

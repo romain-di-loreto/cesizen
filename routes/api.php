@@ -7,6 +7,7 @@ use App\Http\Controllers\Api\UserController;
 use App\Http\Middleware\ApiSanctumAuth;
 use App\Http\Middleware\CheckPermission;
 use App\Models\Role;
+use App\Models\RolePermission;
 use Illuminate\Support\Facades\Route;
 
 
@@ -28,10 +29,11 @@ Route::middleware([
 
 Route::middleware([
     ApiSanctumAuth::class . ':required',
+    CheckPermission::class
 ])->group(function () {
-    Route::put('/users/{user_id}/informations/favorites', [UserController::class, 'favorites'])->where('user_id', '[0-9]+'); 
-    Route::put('/users/{user_id}/exercices', [UserController::class, 'exercices'])->where('user_id', '[0-9]+'); 
-    Route::put('/users/{user_id}/exercices/favorites', [UserController::class, 'favoriteExercices'])->where('user_id', '[0-9]+'); 
+    Route::get('/users/{user_id}/informations/favorites', [UserController::class, 'favorites'])->where('user_id', '[0-9]+'); 
+    Route::get('/users/{user_id}/exercices', [UserController::class, 'exercices'])->where('user_id', '[0-9]+'); 
+    Route::get('/users/{user_id}/exercices/favorites', [UserController::class, 'favoriteExercices'])->where('user_id', '[0-9]+'); 
 
     Route::post('/users/logout', [UserController::class, 'logout']);
     Route::put('/users/{user_id}', [UserController::class, 'update'])->where('user_id', '[0-9]+'); 
@@ -50,6 +52,7 @@ Route::middleware([
     CheckPermission::class . ':role=' . Role::ADMIN
 ])->group(function () {
     Route::get('/users', [UserController::class, 'getAll']); 
+    Route::get('/users/roles', [UserController::class, 'roles']); 
 
     Route::post('/informations', [InformationController::class, 'store']);
     Route::put('/informations/{information_id}', [InformationController::class, 'update'])->where('information_id', '[0-9]+');

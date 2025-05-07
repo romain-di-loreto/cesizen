@@ -30,8 +30,16 @@ class AuthenticatedSessionController extends Controller
     public function store(LoginRequest $request): RedirectResponse
     {
         $request->authenticate();
-
         $request->session()->regenerate();
+
+        // Create token
+        
+        $user = $request->user();
+        // $user->tokens()->delete();
+        $token = $user->createToken('admin-panel')->plainTextToken;
+
+        // Store token in session or flash data for Inertia
+        session(['api_token' => $token]);
 
         return redirect()->intended(route('dashboard', absolute: false));
     }
