@@ -202,11 +202,10 @@ class UserController extends Controller
         $includeInactive = filter_var($request->query('inactive', false), FILTER_VALIDATE_BOOLEAN);
 
         $userAuthed = $request->user();
-        if($userAuthed)
-            abort(406, 'truc');
+        
+        $role = $userAuthed->role();
 
-        $role = $userAuthed->role;
-        if($user_id != $userAuthed->id && !$role || $role->name != Role::ADMIN) {
+        if($user_id != $userAuthed->id && (!$role || $role->name != Role::ADMIN)) {
             abort(401, 'Unauthorized');
         }
 
@@ -237,8 +236,8 @@ class UserController extends Controller
 
         $userAuthed = $request->user();
 
-        $role = $userAuthed->role;
-        if($user_id != $userAuthed->id && !$role || $role->name != Role::ADMIN) {
+        $role = $userAuthed->role();
+        if($user_id != $userAuthed->id && (!$role || $role->name != Role::ADMIN)) {
             abort(401, 'Unauthorized');
         }      
 
@@ -269,8 +268,8 @@ class UserController extends Controller
 
         $userAuthed = $request->user();
 
-        $role = $userAuthed->role;
-        if($user_id != $userAuthed->id && !$role || $role->name != Role::ADMIN) {
+        $role = $userAuthed->role();
+        if($user_id != $userAuthed->id && (!$role || $role->name != Role::ADMIN)) {
             abort(401, 'Unauthorized');
         }      
 
@@ -282,7 +281,7 @@ class UserController extends Controller
         if($includeInactive)
             $exercices = BreathingExercice::where('author_id', '=', $user_id)->paginate($count, ['*'], 'page', $page);
         else
-            $exercices = User::where('author_id', '=', $user_id, 'and')->where('active', '=', true)
+            $exercices = BreathingExercice::where('author_id', '=', $user_id, 'and')->where('active', '=', true)
                 ->paginate($count, ['*'], 'page', $page);
 
         return response()->json(PaginationHelper::format($exercices));
@@ -695,11 +694,17 @@ class UserController extends Controller
             return response()->json(['message' => 'User deactivated'], 200);
         }
     }
-
     public function roles(Request $request, $user_id)
     {
         return response()->json(Role::all());
     }
 
-    
+    public function isTokenValid(Request $request) {
+        $user = $request->user(); 
+
+        if(!$user) 
+            return response()->json(['message'=>'Unauthentified'], 401);
+        
+        return response()->json(['message'=>'Authentified'], 200);
+    }
 }

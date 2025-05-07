@@ -255,10 +255,10 @@ class ExerciceController extends Controller
 
         $exercice_id = $request->exercice_id;
 
-        $doesExist = FavoriteExercice::where('user_id', '=', $user_id, 'and')->where('information_id', '=', $exercice_id)->exists();
+        $doesExist = FavoriteExercice::where('user_id', '=', $user_id, 'and')->where('exercice_id', '=', $exercice_id)->exists();
 
         if($doesExist)
-            FavoriteExercice::where('user_id', '=', $user_id, 'and')->where('information_id', '=', $exercice_id)->delete();
+            FavoriteExercice::where('user_id', '=', $user_id, 'and')->where('exercice_id', '=', $exercice_id)->delete();
         else
             FavoriteExercice::create([
                 'user_id' => $user_id,

@@ -35,6 +35,7 @@ Route::middleware([
     Route::get('/users/{user_id}/exercices', [UserController::class, 'exercices'])->where('user_id', '[0-9]+'); 
     Route::get('/users/{user_id}/exercices/favorites', [UserController::class, 'favoriteExercices'])->where('user_id', '[0-9]+'); 
 
+    Route::post('/users/is-token-valid', [UserController::class, 'isTokenValid']);
     Route::post('/users/logout', [UserController::class, 'logout']);
     Route::put('/users/{user_id}', [UserController::class, 'update'])->where('user_id', '[0-9]+'); 
     Route::delete('/users/{user_id}', [UserController::class, 'destroy'])->where('user_id', '[0-9]+'); 
@@ -66,6 +67,6 @@ Route::middleware([
 Route::middleware(['auth:sanctum'])->get('/me', function (Request $request) {
     return response()->json([
         'user' => $request->user(),
-        'role' => $request->user()->role?->name
+        'role' => $request->user()->role()?->name
     ]);
 });
