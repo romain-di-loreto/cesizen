@@ -4,8 +4,16 @@ FROM php:8.3-cli-alpine AS builder
 LABEL org.opencontainers.image.source=https://github.com/your-org/your-php-project
 
 # Install dependencies (Composer, Git, Node.js, etc.)
-RUN apk add --no-cache curl git unzip nodejs npm \
-    && curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
+RUN apk add --no-cache \
+bash \
+curl \
+git \
+unzip \
+nodejs \
+npm \
+postgresql-dev \
+&& docker-php-ext-install pdo_pgsql
+RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
     
 
 # Set working directory and copy project files
@@ -17,6 +25,7 @@ COPY ./shared.env /app/.env
 RUN npm install
 RUN composer install --no-dev --optimize-autoloader
 RUN npm run build
+RUN php artisan key:generate
 
 # Optional Laravel-specific: cache config/routes
 # RUN php artisan config:cache && php artisan route:cache
@@ -25,7 +34,14 @@ RUN npm run build
 FROM php:8.3-cli-alpine AS php
 
 # Install runtime deps
-RUN apk add --no-cache bash
+# Install runtime dependencies and pdo_pgsql
+RUN apk add --no-cache \
+    bash \
+    postgresql-dev \
+    libpq \
+    nodejs \
+    npm \
+    && docker-php-ext-install pdo_pgsql
 
 WORKDIR /app
 
