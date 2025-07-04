@@ -35,7 +35,7 @@ jobs:
       - name: Docker Login ghcr.io
         run: echo "${{ secrets.GHCR_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
       - name: Build Front Docker Image
-        run: docker build -t ${{ env.IMAGE_NAME }} -f Dockerfile.web ./
+        run: docker build -t ${{ env.IMAGE_NAME }} -f Dockerfile ./
       - name: Push Front Docker Image
         run: docker push ${{ env.IMAGE_NAME }}
 
