@@ -5,13 +5,19 @@
 # fi
 
 npm install
+apk add --no-cache postgresql-client
+
 
 echo "Waiting for DB..."
-until nc -z db 5432; do
-  sleep 1
+until pg_isready -h "$DB_HOST" -p "$DB_PORT" -U "$DB_USERNAME"; do
+  echo "Waiting for PostgreSQL..."
+  sleep 2
 done
 
-php artisan migrate --force
-php artisan db:seed
+php artisan config:clear
+php artisan cache:clear
+php artisan config:cache
+php artisan migrate --force  || true
+php artisan db:seed 
 
 exec "$@"
