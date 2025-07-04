@@ -1,4 +1,5 @@
 name: linter
+run-name: ESLint on '${{ github.ref_name }}' branch
 
 on:
   push:

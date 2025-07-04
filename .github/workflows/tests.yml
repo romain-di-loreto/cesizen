@@ -1,4 +1,6 @@
 name: tests
+run-name: Phpunit on '${{ github.ref_name }}' branch
+
 
 on:
   push:
