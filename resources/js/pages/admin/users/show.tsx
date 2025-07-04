@@ -1,6 +1,6 @@
-import React from 'react';
-import { usePage } from '@inertiajs/react';
 import AdminLayout from '@/layouts/admin-layout';
+import { usePage } from '@inertiajs/react';
+import React from 'react';
 
 interface Role {
     id: number;
@@ -23,30 +23,28 @@ interface props {
 const ShowUser: React.FC = () => {
     const { user, roles } = usePage().props as unknown as props;
 
-    const userRole = roles.find(role => role.id === user.role_id)?.name || 'None';
+    const userRole = roles.find((role) => role.id === user.role_id)?.name || 'None';
 
     return (
         <AdminLayout>
-            <div className="max-w-2xl mx-auto mt-10 bg-white p-6 rounded shadow">
-                <h1 className="text-xl font-bold mb-6">User Details</h1>
+            <div className="mx-auto mt-10 max-w-2xl rounded bg-white p-6 shadow">
+                <h1 className="mb-6 text-xl font-bold">User Details</h1>
                 <div className="space-y-4">
                     <div>
                         <label className="block text-sm font-medium text-gray-600">Name</label>
-                        <p className="p-2 border rounded bg-gray-100">{user.name}</p>
+                        <p className="rounded border bg-gray-100 p-2">{user.name}</p>
                     </div>
                     <div>
                         <label className="block text-sm font-medium text-gray-600">Email</label>
-                        <p className="p-2 border rounded bg-gray-100">{user.email}</p>
+                        <p className="rounded border bg-gray-100 p-2">{user.email}</p>
                     </div>
                     <div>
                         <label className="block text-sm font-medium text-gray-600">Role</label>
-                        <p className="p-2 border rounded bg-gray-100">{userRole}</p>
+                        <p className="rounded border bg-gray-100 p-2">{userRole}</p>
                     </div>
                     <div>
                         <label className="block text-sm font-medium text-gray-600">Active</label>
-                        <p className="p-2 border rounded bg-gray-100">
-                            {user.active ? 'Yes' : 'No'}
-                        </p>
+                        <p className="rounded border bg-gray-100 p-2">{user.active ? 'Yes' : 'No'}</p>
                     </div>
                 </div>
             </div>

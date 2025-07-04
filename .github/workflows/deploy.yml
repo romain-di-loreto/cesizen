@@ -1,0 +1,71 @@
+name: Build Docker Image And Deploy to Remote Server
+run-name: Building, Testing and Deploying the '${{ github.ref_name }}' branch
+on: 
+  push:
+    branches:
+      - prod
+jobs:
+  build-docker:
+    runs-on: ubuntu-latest
+    name: Build ${{ github.ref_name == 'main' && 'Production' || 'Development' }} Docker Image
+    environment:
+      name: ${{ github.ref_name == 'main' && 'prod' || 'test' }}
+    if: github.ref_name == 'main' || github.ref_name == 'dev'
+    env:
+      IMAGE_NAME: ghcr.io/${{ vars.IMAGE_NAME }}:latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+            ref: ${{ github.ref_name }}
+      - name: Set up Docker's apt repository.
+        run : |
+          sudo apt-get update
+          sudo apt-get install ca-certificates curl
+          sudo install -m 0755 -d /etc/apt/keyrings
+          sudo curl -fsSL https://download.docker.com/linux/ubuntu/gpg -o /etc/apt/keyrings/docker.asc
+          sudo chmod a+r /etc/apt/keyrings/docker.asc
+          echo \
+            "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.asc] https://download.docker.com/linux/ubuntu \
+            $(. /etc/os-release && echo "${UBUNTU_CODENAME:-$VERSION_CODENAME}") stable" | \
+            sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+          sudo apt-get update
+      - name: Install Docker Engine
+        run: |
+          sudo apt-get install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
+      - name: Docker Login ghcr.io
+        run: echo "${{ secrets.GHCR_TOKEN }}" | docker login ghcr.io -u romain-di-loreto --password-stdin
+      - name: Build Front Docker Image
+        run: docker build -t ${{ env.IMAGE_NAME }} -f Dockerfile.web ./
+      - name: Push Front Docker Image
+        run: docker push ${{ env.IMAGE_NAME }}
+
+  deploy-docker:
+    runs-on: ubuntu-latest
+    needs: build-docker
+    environment:
+      name: ${{ github.ref_name == 'main' && 'prod' || 'test' }}
+      url: ${{ vars.DEPLOY_URL }}
+    if: github.ref_name == 'main' || github.ref_name == 'dev'  || github.ref_name == 'prod'
+    name: Deploy ${{ github.ref_name == 'main' && 'Production' || 'Test' }} Docker Image To Remote Server With SSH
+    env:
+      WORKDIR: ./$(basename "${{ github.repository }}")/${{ vars.WORKDIR }}
+      COMPOSE_FILE: docker-compose.yml
+      SSH: "${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}"
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.ref_name }}
+      - name: Setting up SSH
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.SSH_KEY }}" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+          ssh-keyscan ${{ secrets.SSH_HOST }} >> ~/.ssh/known_hosts
+      - name: Create working directory on remote server if it does not exist
+        run: ssh -o StrictHostKeyChecking=no ${{ env.SSH }} "mkdir -p ${{ env.WORKDIR }}"
+      - name: Copy Front Docker Compose file
+        run: scp -o StrictHostKeyChecking=no ${{ env.COMPOSE_FILE }} ${{ env.SSH }}:${{ env.WORKDIR }}/${{ env.COMPOSE_FILE }}
+      - name: Deploy Front Docker Compose
+        run: ssh -o StrictHostKeyChecking=no ${{ env.SSH }} "(echo "${{ secrets.GHCR_TOKEN }}" | sudo docker login ghcr.io -u romain-di-loreto --password-stdin) && cd ${{ env.WORKDIR }} && sudo docker compose -f ${{ env.COMPOSE_FILE }} pull && sudo docker compose -f ${{ env.COMPOSE_FILE }} up -d"
+
+  

@@ -1,9 +1,9 @@
-import React, { useEffect, useState } from 'react';
-import { router, Link, usePage } from '@inertiajs/react';
-import { Dialog } from '@headlessui/react';
-import { Pencil, Trash2, EyeOff, Eye } from 'lucide-react';
-import axios from 'axios';
 import AdminLayout from '@/layouts/admin-layout';
+import { Dialog } from '@headlessui/react';
+import { Link, usePage } from '@inertiajs/react';
+import axios from 'axios';
+import { Eye, EyeOff, Pencil, Trash2 } from 'lucide-react';
+import React, { useEffect, useState } from 'react';
 
 interface User {
     id: number;
@@ -28,7 +28,6 @@ const Users: React.FC = () => {
     const { token } = usePage().props.auth as { token: string };
     axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
 
-    
     const fetchUsers = async () => {
         try {
             const response = await axios.get('/api/users', {
@@ -68,13 +67,17 @@ const Users: React.FC = () => {
 
     const updateUserActiveStatus = async (userId: number, active: boolean) => {
         try {
-            await axios.put(`/api/users/${userId}`, {
-                active,
-            }, {
-                headers: {
-                    Authorization: `Bearer ${token}`,
-                }
-            });
+            await axios.put(
+                `/api/users/${userId}`,
+                {
+                    active,
+                },
+                {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                    },
+                },
+            );
         } catch (err) {
             console.error('Failed to update user active status', err);
         }
@@ -87,8 +90,8 @@ const Users: React.FC = () => {
                     Authorization: `Bearer ${token}`,
                 },
                 params: {
-                    hard: true
-                }
+                    hard: true,
+                },
             });
             fetchUsers();
             setDeletionTarget(null);
@@ -99,20 +102,17 @@ const Users: React.FC = () => {
 
     return (
         <AdminLayout>
-            <div className="p-6 space-y-6">
-                <div className="flex justify-between items-center">
+            <div className="space-y-6 p-6">
+                <div className="flex items-center justify-between">
                     <h1 className="text-2xl font-bold">Users</h1>
-                    <Link
-                        href="/admin/users/new"
-                        className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
-                    >
+                    <Link href="/admin/users/new" className="rounded bg-blue-600 px-4 py-2 text-white hover:bg-blue-700">
                         New
                     </Link>
                 </div>
 
-                <table className="min-w-full bg-white rounded shadow">
+                <table className="min-w-full rounded bg-white shadow">
                     <thead>
-                        <tr className="bg-gray-100 text-left">
+                        <tr className="bg-gray-100 text-left text-black">
                             <th className="p-3">Name</th>
                             <th className="p-3">Email</th>
                             <th className="p-3">Status</th>
@@ -130,30 +130,24 @@ const Users: React.FC = () => {
                                 <td className="p-3">{user.email}</td>
                                 <td className="p-3">
                                     {user.active ? (
-                                        <span className="text-green-600 font-semibold">Active</span>
+                                        <span className="font-semibold text-green-600">Active</span>
                                     ) : (
                                         <span className="text-gay-500 font-semibold">Inactive</span>
                                     )}
                                 </td>
-                                <td className="p-3 flex justify-end space-x-2">
-                                    <Link
-                                        href={`/admin/users/${user.id}/edit`}
-                                        className="p-2 bg-orange-500 text-white rounded hover:bg-orange-600"
-                                    >
+                                <td className="flex justify-end space-x-2 p-3">
+                                    <Link href={`/admin/users/${user.id}/edit`} className="rounded bg-orange-500 p-2 text-white hover:bg-orange-600">
                                         <Pencil size={16} />
                                     </Link>
                                     <button
                                         onClick={() => toggleActive(user)}
-                                        className={`p-2 text-white rournded ${
+                                        className={`rournded p-2 text-white ${
                                             user.active ? 'bg-red-600 hover:bg-red-700' : 'bg-green-600 hover:bg-green-700'
                                         }`}
                                     >
                                         {user.active ? <EyeOff size={16} /> : <Eye size={16} />}
                                     </button>
-                                    <button
-                                        onClick={() => setDeletionTarget(user)}
-                                        className="p-2 bg-red-600 text-white rounded hover:bg-red-700"
-                                    >
+                                    <button onClick={() => setDeletionTarget(user)} className="rounded bg-red-600 p-2 text-white hover:bg-red-700">
                                         <Trash2 size={16} />
                                     </button>
                                 </td>
@@ -165,7 +159,7 @@ const Users: React.FC = () => {
                 {/* Pagination Controls */}
                 <div className="flex justify-between pt-4">
                     <button
-                        className="px-3 py-1 rounded bg-gray-200 hover:bg-gray-300"
+                        className="rounded bg-white px-3 py-1 text-black hover:bg-gray-300"
                         onClick={() => setPagination((p) => ({ ...p, page: Math.max(1, p.page - 1) }))}
                         disabled={pagination.page <= 1}
                     >
@@ -173,7 +167,7 @@ const Users: React.FC = () => {
                     </button>
                     <span>Page {pagination.page}</span>
                     <button
-                        className="px-3 py-1 rounded bg-gray-200 hover:bg-gray-300"
+                        className="rounded bg-white px-3 py-1 text-black hover:bg-gray-300"
                         onClick={() => setPagination((p) => ({ ...p, page: p.page + 1 }))}
                     >
                         Next
@@ -184,21 +178,17 @@ const Users: React.FC = () => {
                 <Dialog open={!!deletionTarget} onClose={() => setDeletionTarget(null)} className="relative z-50">
                     <div className="fixed inset-0 bg-black/30" aria-hidden="true" />
                     <div className="fixed inset-0 flex items-center justify-center p-4">
-                        <Dialog.Panel className="bg-white p-6 rounded shadow max-w-sm w-full">
+                        <Dialog.Panel className="w-full max-w-sm rounded bg-white p-6 shadow">
                             <Dialog.Title className="text-lg font-bold">Delete user</Dialog.Title>
                             <p className="mt-2">
-                                Are you sure you want to permanently delete{' '}
-                                <strong>{deletionTarget?.name}</strong>?
+                                Are you sure you want to permanently delete <strong>{deletionTarget?.name}</strong>?
                             </p>
                             <div className="mt-4 flex justify-end space-x-3">
-                                <button
-                                    className="px-4 py-2 bg-gray-200 rounded hover:bg-gray-300"
-                                    onClick={() => setDeletionTarget(null)}
-                                >
+                                <button className="rounded bg-gray-200 px-4 py-2 hover:bg-gray-300" onClick={() => setDeletionTarget(null)}>
                                     Cancel
                                 </button>
                                 <button
-                                    className="px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700"
+                                    className="rounded bg-red-600 px-4 py-2 text-white hover:bg-red-700"
                                     onClick={() => deletionTarget && deleteUser(deletionTarget)}
                                 >
                                     Delete

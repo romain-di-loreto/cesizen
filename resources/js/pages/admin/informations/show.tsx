@@ -1,6 +1,6 @@
-import React from 'react';
-import { usePage, Link } from '@inertiajs/react';
 import AdminLayout from '@/layouts/admin-layout';
+import { Link, usePage } from '@inertiajs/react';
+import React from 'react';
 
 interface Category {
     id: number;
@@ -24,17 +24,14 @@ interface Props {
 const ShowInformation: React.FC = () => {
     const { information, categories } = usePage().props as unknown as Props;
 
-    const category = categories.find(cat => cat.id === information.category_id);
+    const category = categories.find((cat) => cat.id === information.category_id);
 
     return (
         <AdminLayout>
-            <div className="max-w-2xl mx-auto mt-10 bg-white p-6 rounded shadow">
-                <div className="flex justify-between items-center mb-6">
+            <div className="mx-auto mt-10 max-w-2xl rounded bg-white p-6 shadow">
+                <div className="mb-6 flex items-center justify-between">
                     <h1 className="text-xl font-bold">Information Details</h1>
-                    <Link
-                        href={`/admin/informations/${information.id}/edit`}
-                        className="text-blue-600 hover:underline"
-                    >
+                    <Link href={`/admin/informations/${information.id}/edit`} className="text-blue-600 hover:underline">
                         Edit
                     </Link>
                 </div>

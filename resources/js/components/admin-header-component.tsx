@@ -1,19 +1,19 @@
-import React from 'react';
-import { Link, router } from '@inertiajs/react';
 import { useMobileNavigation } from '@/hooks/use-mobile-navigation';
+import { Link, router } from '@inertiajs/react';
 import { LogOut } from 'lucide-react';
+import React from 'react';
 
 const Header: React.FC = () => {
     const cleanup = useMobileNavigation();
-    
+
     const handleLogout = () => {
         cleanup();
         router.flushAll();
     };
 
     return (
-        <div className="bg-blue-600 text-white p-4">
-            <div className="max-w-7xl mx-auto flex justify-between items-center">
+        <div className="bg-blue-600 p-4 text-white">
+            <div className="mx-auto flex max-w-7xl items-center justify-between">
                 {/* Logo or Home link */}
                 <div>
                     <Link href="/admin" className="text-2xl font-bold hover:text-gray-300">
@@ -38,8 +38,13 @@ const Header: React.FC = () => {
                 </div>
 
                 {/* Logout Button */}
-                <Link className="flex items-center bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded" 
-                    method="post" href={route('logout')} as="button" onClick={handleLogout}>
+                <Link
+                    className="flex items-center rounded bg-red-600 px-4 py-2 text-white hover:bg-red-700"
+                    method="post"
+                    href={route('logout')}
+                    as="button"
+                    onClick={handleLogout}
+                >
                     <LogOut className="mr-2" />
                     Log out
                 </Link>

@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from 'react';
-import { usePage, router } from '@inertiajs/react';
 import AdminLayout from '@/layouts/admin-layout';
+import { router, usePage } from '@inertiajs/react';
 import axios from 'axios';
+import React from 'react';
 
 interface Exercise {
     id: number;
@@ -24,7 +24,7 @@ const ShowExercise: React.FC = () => {
     const { exercise } = usePage().props as unknown as Props;
 
     const handleDelete = async () => {
-        if (confirm("Are you sure you want to delete this exercise?")) {
+        if (confirm('Are you sure you want to delete this exercise?')) {
             try {
                 await axios.delete(`/api/exercices/${exercise.id}`);
                 router.visit('/admin/exercices');
@@ -36,8 +36,8 @@ const ShowExercise: React.FC = () => {
 
     return (
         <AdminLayout>
-            <div className="max-w-2xl mx-auto mt-10 bg-white p-6 rounded shadow">
-                <h1 className="text-xl font-bold mb-4">Exercise Details</h1>
+            <div className="mx-auto mt-10 max-w-2xl rounded bg-white p-6 shadow">
+                <h1 className="mb-4 text-xl font-bold">Exercise Details</h1>
                 <div className="space-y-4">
                     <div>
                         <label className="block text-sm font-medium">Title</label>
@@ -77,18 +77,15 @@ const ShowExercise: React.FC = () => {
                     </div>
                 </div>
 
-                <div className="flex justify-end space-x-4 mt-6">
+                <div className="mt-6 flex justify-end space-x-4">
                     <button
                         onClick={() => router.visit(`/admin/exercices/${exercise.id}/edit`)}
-                        className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
+                        className="rounded bg-blue-600 px-4 py-2 text-white hover:bg-blue-700"
                     >
                         Edit
                     </button>
 
-                    <button
-                        onClick={handleDelete}
-                        className="bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700"
-                    >
+                    <button onClick={handleDelete} className="rounded bg-red-600 px-4 py-2 text-white hover:bg-red-700">
                         Delete
                     </button>
                 </div>

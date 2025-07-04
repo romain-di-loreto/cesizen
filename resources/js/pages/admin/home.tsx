@@ -1,6 +1,6 @@
-import React from 'react';
-import { Link } from '@inertiajs/react';
 import AdminLayout from '@/layouts/admin-layout';
+import { Link } from '@inertiajs/react';
+import React from 'react';
 
 interface Props {
     counts: {
@@ -13,7 +13,7 @@ interface Props {
 
 const Home: React.FC<Props> = ({ counts }) => {
     return (
-        <AdminLayout>            
+        <AdminLayout>
             <div className="p-6">
                 <div className="grid grid-cols-2 gap-6">
                     <Card count={counts.users} label="Users" href="/admin/users" />
@@ -34,9 +34,9 @@ interface CardProps {
 
 const Card: React.FC<CardProps> = ({ count, label, href }) => {
     return (
-        <Link href={href} className="p-6 bg-white rounded shadow hover:shadow-lg transition duration-200">
-            <h2 className="text-xl font-semibold">{label}</h2>
-            <p className="text-3xl font-bold">{count}</p>
+        <Link href={href} className="rounded bg-white p-6 shadow transition duration-200 hover:shadow-lg">
+            <h2 className="text-xl font-semibold text-black">{label}</h2>
+            <p className="text-3xl font-bold text-black">{count}</p>
         </Link>
     );
 };

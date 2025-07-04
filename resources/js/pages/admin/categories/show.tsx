@@ -1,7 +1,7 @@
-import React from 'react';
-import { usePage, router } from '@inertiajs/react';
 import AdminLayout from '@/layouts/admin-layout';
+import { router, usePage } from '@inertiajs/react';
 import axios from 'axios';
+import React from 'react';
 
 interface Category {
     id: number;
@@ -18,7 +18,7 @@ const ShowCategory: React.FC = () => {
     const { category } = usePage().props as unknown as Props;
 
     const handleDelete = async () => {
-        if (confirm("Are you sure you want to delete this category?")) {
+        if (confirm('Are you sure you want to delete this category?')) {
             try {
                 await axios.delete(`/api/categories/${category.id}`);
                 router.visit('/admin/categories');
@@ -30,8 +30,8 @@ const ShowCategory: React.FC = () => {
 
     return (
         <AdminLayout>
-            <div className="max-w-md mx-auto mt-10 bg-white p-6 rounded shadow">
-                <h1 className="text-xl font-bold mb-4">Category Details</h1>
+            <div className="mx-auto mt-10 max-w-md rounded bg-white p-6 shadow">
+                <h1 className="mb-4 text-xl font-bold">Category Details</h1>
                 <div className="space-y-4">
                     <div>
                         <label className="block text-sm font-medium">Name</label>
@@ -47,18 +47,15 @@ const ShowCategory: React.FC = () => {
                     </div>
                 </div>
 
-                <div className="flex justify-end space-x-4 mt-6">
+                <div className="mt-6 flex justify-end space-x-4">
                     <button
                         onClick={() => router.visit(`/admin/categories/${category.id}/edit`)}
-                        className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
+                        className="rounded bg-blue-600 px-4 py-2 text-white hover:bg-blue-700"
                     >
                         Edit
                     </button>
 
-                    <button
-                        onClick={handleDelete}
-                        className="bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700"
-                    >
+                    <button onClick={handleDelete} className="rounded bg-red-600 px-4 py-2 text-white hover:bg-red-700">
                         Delete
                     </button>
                 </div>

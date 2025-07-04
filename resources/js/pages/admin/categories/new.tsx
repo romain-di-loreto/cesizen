@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
-import { usePage, router } from '@inertiajs/react';
 import AdminLayout from '@/layouts/admin-layout';
+import { router, usePage } from '@inertiajs/react';
 import axios from 'axios';
+import React, { useState } from 'react';
 
 const NewCategory: React.FC = () => {
     const { token } = usePage().props.auth as { token: string };
@@ -15,11 +15,15 @@ const NewCategory: React.FC = () => {
         setErrors({});
 
         try {
-            await axios.post('/api/categories', { name }, {
-                headers: {
-                    Authorization: `Bearer ${token}`,
+            await axios.post(
+                '/api/categories',
+                { name },
+                {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                    },
                 },
-            });
+            );
 
             router.visit('/admin/categories');
         } catch (err: any) {
@@ -35,25 +39,16 @@ const NewCategory: React.FC = () => {
 
     return (
         <AdminLayout>
-            <div className="max-w-md mx-auto mt-10 bg-white p-6 rounded shadow">
-                <h1 className="text-xl font-bold mb-4">Create New Category</h1>
+            <div className="mx-auto mt-10 max-w-md rounded bg-white p-6 shadow">
+                <h1 className="mb-4 text-xl font-bold">Create New Category</h1>
                 <form onSubmit={handleSubmit} className="space-y-4">
                     <div>
                         <label className="block text-sm font-medium">Name</label>
-                        <input
-                            type="text"
-                            value={name}
-                            onChange={(e) => setName(e.target.value)}
-                            className="w-full border p-2 rounded"
-                        />
-                        {errors.name && <p className="text-red-600 text-sm">{errors.name[0]}</p>}
+                        <input type="text" value={name} onChange={(e) => setName(e.target.value)} className="w-full rounded border p-2" />
+                        {errors.name && <p className="text-sm text-red-600">{errors.name[0]}</p>}
                     </div>
                     <div className="text-right">
-                        <button
-                            type="submit"
-                            disabled={submitting}
-                            className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
-                        >
+                        <button type="submit" disabled={submitting} className="rounded bg-blue-600 px-4 py-2 text-white hover:bg-blue-700">
                             {submitting ? 'Creating...' : 'Create'}
                         </button>
                     </div>

@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from 'react';
-import { router, usePage } from '@inertiajs/react';
 import AdminLayout from '@/layouts/admin-layout';
+import { router, usePage } from '@inertiajs/react';
 import axios from 'axios';
+import React, { useState } from 'react';
 
 interface Role {
     id: number;
@@ -16,7 +16,10 @@ interface User {
     role_id: number | null;
 }
 
-interface props { user: User, roles: Role[] }
+interface props {
+    user: User;
+    roles: Role[];
+}
 
 const EditUser: React.FC = () => {
     const { user, roles } = usePage().props as unknown as props;
@@ -61,36 +64,22 @@ const EditUser: React.FC = () => {
 
     return (
         <AdminLayout>
-            <div className="max-w-2xl mx-auto mt-10 bg-white p-6 rounded shadow">
-                <h1 className="text-xl font-bold mb-4">Edit User</h1>
+            <div className="mx-auto mt-10 max-w-2xl rounded bg-white p-6 shadow">
+                <h1 className="mb-4 text-xl font-bold">Edit User</h1>
                 <form onSubmit={handleSubmit} className="space-y-4">
                     <div>
                         <label className="block text-sm font-medium">Name</label>
-                        <input
-                            type="text"
-                            value={name}
-                            onChange={(e) => setName(e.target.value)}
-                            className="w-full border p-2 rounded"
-                        />
-                        {errors.name && <p className="text-red-600 text-sm">{errors.name[0]}</p>}
+                        <input type="text" value={name} onChange={(e) => setName(e.target.value)} className="w-full rounded border p-2" />
+                        {errors.name && <p className="text-sm text-red-600">{errors.name[0]}</p>}
                     </div>
                     <div>
                         <label className="block text-sm font-medium">Email</label>
-                        <input
-                            type="email"
-                            value={email}
-                            onChange={(e) => setEmail(e.target.value)}
-                            className="w-full border p-2 rounded"
-                        />
-                        {errors.email && <p className="text-red-600 text-sm">{errors.email[0]}</p>}
+                        <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} className="w-full rounded border p-2" />
+                        {errors.email && <p className="text-sm text-red-600">{errors.email[0]}</p>}
                     </div>
                     <div>
                         <label className="block text-sm font-medium">Role</label>
-                        <select
-                            value={`${roleId}`}
-                            onChange={(e) => setRoleId(Number(e.target.value) || null)}
-                            className="w-full border p-2 rounded"
-                        >
+                        <select value={`${roleId}`} onChange={(e) => setRoleId(Number(e.target.value) || null)} className="w-full rounded border p-2">
                             <option value="">-- Select Role --</option>
                             {roles.map((role) => (
                                 <option key={role.id} value={role.id}>
@@ -98,17 +87,12 @@ const EditUser: React.FC = () => {
                                 </option>
                             ))}
                         </select>
-                        {errors.role_id && <p className="text-red-600 text-sm">{errors.role_id[0]}</p>}
+                        {errors.role_id && <p className="text-sm text-red-600">{errors.role_id[0]}</p>}
                     </div>
                     <div>
                         <label className="block text-sm font-medium">New Password</label>
-                        <input
-                            type="password"
-                            value={password}
-                            onChange={(e) => setPassword(e.target.value)}
-                            className="w-full border p-2 rounded"
-                        />
-                        {errors.password && <p className="text-red-600 text-sm">{errors.password[0]}</p>}
+                        <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} className="w-full rounded border p-2" />
+                        {errors.password && <p className="text-sm text-red-600">{errors.password[0]}</p>}
                     </div>
                     <div>
                         <label className="block text-sm font-medium">Confirm New Password</label>
@@ -116,24 +100,18 @@ const EditUser: React.FC = () => {
                             type="password"
                             value={passwordConfirmation}
                             onChange={(e) => setPasswordConfirmation(e.target.value)}
-                            className="w-full border p-2 rounded"
+                            className="w-full rounded border p-2"
                         />
-                        {errors.password_confirmation && <p className="text-red-600 text-sm">{errors.password_confirmation[0]}</p>}
+                        {errors.password_confirmation && <p className="text-sm text-red-600">{errors.password_confirmation[0]}</p>}
                     </div>
                     <div className="flex items-center space-x-2">
-                        <input
-                            type="checkbox"
-                            checked={active}
-                            onChange={() => setActive(!active)}
-                            id="active"
-                        />
-                        <label htmlFor="active" className="text-sm">Active</label>
+                        <input type="checkbox" checked={active} onChange={() => setActive(!active)} id="active" />
+                        <label htmlFor="active" className="text-sm">
+                            Active
+                        </label>
                     </div>
                     <div className="text-right">
-                        <button
-                            type="submit"
-                            className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
-                        >
+                        <button type="submit" className="rounded bg-blue-600 px-4 py-2 text-white hover:bg-blue-700">
                             Update
                         </button>
                     </div>

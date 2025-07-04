@@ -1,0 +1,38 @@
+version: '3.9'
+
+networks:
+  cesizen-net:
+    driver: bridge
+
+services:
+  api:
+    image: ghcr.io/romain-di-loreto/cesizen/front:latest
+    container_name: laravel-cesizen
+    environment:
+      POSTGRES_DB: app_db
+      POSTGRES_USER: app_user
+      POSTGRES_PASSWORD: secret
+    ports:
+      - "80:8000"
+    networks:
+      - cesizen-net
+    depends_on:
+      - db
+
+  db:
+    image: postgres:15-alpine
+    container_name: pgsql-db
+    environment:
+      POSTGRES_DB: app_db
+      POSTGRES_USER: app_user
+      POSTGRES_PASSWORD: secret
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    networks:
+      - cesizen-net
+
+volumes:
+  pgdata:
+

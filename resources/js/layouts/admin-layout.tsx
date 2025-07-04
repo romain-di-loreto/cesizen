@@ -1,5 +1,5 @@
 import Header from '@/components/admin-header-component';
-import React, { ReactNode } from 'react';
+import { ReactNode } from 'react';
 
 interface AdminLayoutProps {
     children: ReactNode;
@@ -12,9 +12,7 @@ const AdminLayout = ({ children }: AdminLayoutProps) => {
             <Header />
 
             {/* Page Content */}
-            <main className="p-6">
-                {children}
-            </main>
+            <main className="p-6">{children}</main>
         </div>
     );
 };
