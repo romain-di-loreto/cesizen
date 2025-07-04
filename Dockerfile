@@ -3,10 +3,9 @@ FROM php:8.3-cli-alpine AS builder
 
 LABEL org.opencontainers.image.source=https://github.com/your-org/your-php-project
 
-# Install dependencies (Composer, Git, etc.)
-RUN apk add --no-cache curl git unzip \
+# Install dependencies (Composer, Git, Node.js, etc.)
+RUN apk add --no-cache curl git unzip nodejs npm \
     && curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
-
     
 
 # Set working directory and copy project files
