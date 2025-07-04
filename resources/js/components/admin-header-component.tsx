@@ -17,7 +17,7 @@ const Header: React.FC = () => {
                 {/* Logo or Home link */}
                 <div>
                     <Link href="/admin" className="text-2xl font-bold hover:text-gray-300">
-                        Admin Dashboard
+                        Admin Dashboard 1235
                     </Link>
                 </div>
 
