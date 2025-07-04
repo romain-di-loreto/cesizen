@@ -11,11 +11,11 @@ until pg_isready -h "$DB_HOST" -p "$DB_PORT" -U "$DB_USERNAME"; do
 done
 
 php artisan config:clear
+php artisan key:generate
 php artisan migrate --force  || true
 php artisan cache:clear
 php artisan config:cache
 php artisan db:seed 
-php artisan key:generate
 
 npm run build
 
