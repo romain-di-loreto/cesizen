@@ -168,6 +168,6 @@ class UserControllerTest extends TestCase
 
         Sanctum::actingAs($admin);
 
-        $this->getJson('/api/users/roles')->assertOk();
+        $this->getJson("/api/users/{$admin->id}/roles")->assertOk();
     }
 }
