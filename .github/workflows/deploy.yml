@@ -12,7 +12,7 @@ jobs:
       name: ${{ github.ref_name == 'main' && 'prod' || 'test' }}
     if: github.ref_name == 'main' || github.ref_name == 'prod' || github.ref_name == 'dev'
     env:
-      IMAGE_NAME: ghcr.io/${{ vars.IMAGE_NAME }}:latest
+      IMAGE_NAME: ghcr.io/${{ github.repository }}/${{ vars.IMAGE_NAME }}:latest
     steps:
       - uses: actions/checkout@v4
         with:
@@ -33,7 +33,7 @@ jobs:
         run: |
           sudo apt-get install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
       - name: Docker Login ghcr.io
-        run: echo "${{ secrets.GHCR_TOKEN }}" | docker login ghcr.io -u romain-di-loreto --password-stdin
+        run: echo "${{ secrets.GHCR_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
       - name: Build Front Docker Image
         run: docker build -t ${{ env.IMAGE_NAME }} -f Dockerfile.web ./
       - name: Push Front Docker Image
@@ -66,6 +66,6 @@ jobs:
       - name: Copy Front Docker Compose file
         run: scp -o StrictHostKeyChecking=no ${{ env.COMPOSE_FILE }} ${{ env.SSH }}:${{ env.WORKDIR }}/${{ env.COMPOSE_FILE }}
       - name: Deploy Front Docker Compose
-        run: ssh -o StrictHostKeyChecking=no ${{ env.SSH }} "(echo "${{ secrets.GHCR_TOKEN }}" | sudo docker login ghcr.io -u romain-di-loreto --password-stdin) && cd ${{ env.WORKDIR }} && sudo docker compose -f ${{ env.COMPOSE_FILE }} pull && sudo docker compose -f ${{ env.COMPOSE_FILE }} up -d"
+        run: ssh -o StrictHostKeyChecking=no ${{ env.SSH }} "(echo "${{ secrets.GHCR_TOKEN }}" | sudo docker login ghcr.io -u ${{ github.actor }} --password-stdin) && cd ${{ env.WORKDIR }} && sudo docker compose -f ${{ env.COMPOSE_FILE }} pull && sudo docker compose -f ${{ env.COMPOSE_FILE }} up -d"
 
   
