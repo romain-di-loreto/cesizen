@@ -15,6 +15,7 @@ php artisan migrate --force  || true
 php artisan cache:clear
 php artisan config:cache
 php artisan db:seed 
+php artisan key:generate
 
 npm run build
 

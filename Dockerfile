@@ -25,7 +25,6 @@ COPY ./shared.env /app/.env
 RUN npm install
 RUN composer install --no-dev --optimize-autoloader
 RUN npm run build
-RUN php artisan key:generate
 
 # Optional Laravel-specific: cache config/routes
 # RUN php artisan config:cache && php artisan route:cache
