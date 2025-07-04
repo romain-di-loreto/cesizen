@@ -9,9 +9,12 @@ services:
     image: ghcr.io/romain-di-loreto/cesizen/front:latest
     container_name: laravel-cesizen
     environment:
-      POSTGRES_DB: app_db
-      POSTGRES_USER: app_user
-      POSTGRES_PASSWORD: secret
+      DB_CONNECTION: pgsql
+      DB_HOST: pgsql-db
+      DB_PORT: 5432
+      DB_DATABASE: app_db
+      DB_USERNAME: app_user
+      DB_PASSWORD: secret
     ports:
       - "80:8000"
     networks:
